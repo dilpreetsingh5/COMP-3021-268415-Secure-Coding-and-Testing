@@ -1,35 +1,16 @@
 name: Bandit Security Scan
-
-on:
-  push:
-  pull_request:
-  workflow_dispatch:
+on: [push, pull_request]
 
 jobs:
   bandit:
-    name: Run Bandit (Python Security Scan)
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Run Bandit Scan
+        uses: shundor/bandit-action@v1
         with:
-          python-version: '3.x'
-
-      - name: Install Bandit
-        run: pip install bandit
-
-      - name: Run Bandit scan
-        run: |
-          echo "Running Bandit security scan..."
-          bandit -r . -f json -o bandit-report.json || true
-
-      - name: Upload Bandit report artifact
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: bandit-security-report
-          path: bandit-report.json
+          path: "."
+          level: high
+          confidence: high
+          exit_zero: true
