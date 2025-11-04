@@ -1,20 +1,19 @@
 name: Bandit Security Scan
-on:
-  [push, pull_request]
+on: [push, pull_request]
 
 jobs:
   bandit:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      security-events: write  # needed for results to be uploaded to Security tab
+      security-events: write  # allows GitHub to upload results to the Security tab
     steps:
       - uses: actions/checkout@v4
 
       - name: Run Bandit Scan
-        uses: shundor/bandit-action@v1.0
+        uses: PyCQA/bandit-action@v1
         with:
-          path: "."
+          targets: "."
           level: high
           confidence: high
           exit_zero: true
